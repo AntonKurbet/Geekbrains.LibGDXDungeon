@@ -1,0 +1,40 @@
+
+images1.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+weapon
+  rotate: false
+  xy: 2, 2
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+tank
+  rotate: false
+  xy: 44, 2
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+grass40
+  rotate: false
+  xy: 86, 2
+  size: 40, 40
+  orig: 40, 40
+  offset: 0, 0
+  index: -1
+block
+  rotate: false
+  xy: 2, 44
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+projectile
+  rotate: false
+  xy: 2, 66
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
