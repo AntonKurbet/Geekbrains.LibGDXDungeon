@@ -46,27 +46,27 @@ public class Hero {
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
             velocity.set(0, SPEED_Y);
-            angle = 0;
+            angle = 90;
             cellCalc();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
             velocity.set(0, -SPEED_Y);
             cellCalc();
-            angle = 180;
+            angle = -90;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
             velocity.set(-SPEED_X,0);
             cellCalc();
-            angle = 270;
+            angle = 180;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
             velocity.set(SPEED_X,0);
             cellCalc();
-            angle = 90;
+            angle = 0;
         }
 
         if ((targetCell.x >= 0) && (targetCell.x < CELLS_X) && (targetCell.y >= 0) && (targetCell.y < CELLS_Y)) {
-            if (position.epsilonEquals(targetPosition,1)) {
+            if (position.epsilonEquals(targetPosition,2)) {
                 velocity.set(0, 0);
                 positionCell.set(targetCell);
             } else position.mulAdd(velocity, dt);
@@ -80,6 +80,6 @@ public class Hero {
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(texture, position.x, position.y);
+        batch.draw(texture, position.x, position.y,20,20,texture.getRegionWidth(),texture.getRegionHeight(),1,1,angle);
     }
 }
