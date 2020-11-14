@@ -28,7 +28,7 @@ public class Hero {
     public Hero(TextureAtlas atlas, ProjectileController projectileController) {
         this.positionCell = new Vector2(0, 0);
         this.position = new Vector2();
-        this.position = position.set(positionCell).scl(CELL_SIZE).add(20,20);
+        this.position = position.set(positionCell).scl(CELL_SIZE); //.add(20,20);
         this.targetCell = new Vector2();
         this.targetPosition = new Vector2();
         this.velocity = new Vector2(0,0);
@@ -65,7 +65,7 @@ public class Hero {
             angle = 90;
         }
 
-        if ((targetCell.x >= 0) && (targetCell.x <= CELLS_X) && (targetCell.y >= 0) && (targetCell.y <= CELLS_Y)) {
+        if ((targetCell.x >= 0) && (targetCell.x < CELLS_X) && (targetCell.y >= 0) && (targetCell.y < CELLS_Y)) {
             if (position.epsilonEquals(targetPosition,1)) {
                 velocity.set(0, 0);
                 positionCell.set(targetCell);
@@ -76,7 +76,7 @@ public class Hero {
     private void cellCalc() {
         velocityCell.set(velocity).nor();
         targetCell.set(positionCell).add(velocityCell);
-        targetPosition.set(targetCell).scl(CELL_SIZE).add(20,20);
+        targetPosition.set(targetCell).scl(CELL_SIZE); //.add(20,20);
     }
 
     public void render(SpriteBatch batch) {
