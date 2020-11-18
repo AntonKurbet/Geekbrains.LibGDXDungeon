@@ -69,7 +69,9 @@ public class Monster extends Unit {
         do {
             moveX = (int) (cellX + Math.round(Math.random()) * Math.round(1 - Math.random() * 2));
             moveY = (int) (cellY + Math.round(Math.random()) * Math.round(1 - Math.random() * 2));
-        }  while (moveX == 0 && moveY == 0) ;
+        }  while (moveX == 0 && moveY == 0
+                && gc.getGameMap().isCellPassable(moveX, moveY)
+                && gc.getUnitController().isCellFree(moveX, moveY)) ;
         goTo(moveX, moveY);
     }
 
