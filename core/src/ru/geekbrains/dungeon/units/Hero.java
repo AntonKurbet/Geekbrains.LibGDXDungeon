@@ -2,15 +2,23 @@ package ru.geekbrains.dungeon.units;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import ru.geekbrains.dungeon.GameController;
 import ru.geekbrains.dungeon.GameMap;
 
 public class Hero extends Unit {
+    private static final int MAX_MOVES = 5;
     float movementTime;
     float movementMaxTime;
     int targetX, targetY;
+    int experience;
+    int moves;
+    int monsterAttack;
+
+    private BitmapFont font = new BitmapFont();
 
     public Hero(TextureAtlas atlas, GameController gc) {
         super(gc, 1, 1, 10);
@@ -19,6 +27,13 @@ public class Hero extends Unit {
         this.movementMaxTime = 0.2f;
         this.targetX = cellX;
         this.targetY = cellY;
+        this.experience = 0;
+        this.moves = MAX_MOVES;
+    }
+
+    @Override
+    public int fightBack() {
+        return 0;
     }
 
     public void update(float dt) {
@@ -41,7 +56,9 @@ public class Hero extends Unit {
         if (m != null) {
             targetX = cellX;
             targetY = cellY;
-            m.takeDamage(1);
+            monsterAttack = m.takeDamage(1);
+            if (monsterAttack == -1) experience++;
+            else hp -= monsterAttack;
         }
 
         if (!gc.getGameMap().isCellPassable(targetX, targetY)) {
@@ -55,6 +72,7 @@ public class Hero extends Unit {
                 movementTime = 0;
                 cellX = targetX;
                 cellY = targetY;
+                moves = moves > 1 ? moves - 1: MAX_MOVES;
             }
         }
     }
@@ -75,5 +93,9 @@ public class Hero extends Unit {
         batch.setColor(0.0f, 1.0f, 0.0f, 1.0f);
         batch.draw(textureHp, px + 2, py + 52, (float) hp / hpMax * 56, 8);
         batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+        font.setColor(Color.GOLD);
+        font.draw(batch, Integer.toString(experience), px + 2, py + 52);
+        font.setColor(Color.BLUE);
+        font.draw(batch, Integer.toString(moves), px + 52, py + 52);
     }
 }

@@ -24,6 +24,11 @@ public class Monster extends Unit {
         this.hp = hpMax;
     }
 
+    @Override
+    public int fightBack() {
+        return (Math.random() * 4 > 3 ? 1 : 0);
+    }
+
     public void update(float dt) {
     }
 }

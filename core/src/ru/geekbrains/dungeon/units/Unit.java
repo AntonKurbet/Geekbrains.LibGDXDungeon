@@ -34,10 +34,13 @@ public abstract class Unit {
         this.tmp = new Vector2(0, 0);
     }
 
-    public boolean takeDamage(int amount) {
+    public int takeDamage(int amount) {
         hp -= amount;
-        return hp <= 0;
+        if (hp <= 0) return -1;
+        else return fightBack();
     }
+
+    public abstract int fightBack();
 
     public abstract void update(float dt);
 
