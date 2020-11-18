@@ -1,7 +1,6 @@
 package ru.geekbrains.dungeon.units;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import ru.geekbrains.dungeon.GameController;
 
@@ -36,14 +35,45 @@ public class Monster extends Unit {
                 aiBrainsImplseTime = 0.0f;
                 if (canIAttackThisTarget(target)) {
                     attack(target);
+                } else if (canISeeTarget(target)) {
+                    iAmAnger();
+                    tryToMove(target);
                 } else {
-                    tryToMove();
+                    iAmNotAnger();
+                    tryToRandomMove();
                 }
             }
         }
     }
 
-    public void tryToMove() {
+    private void iAmNotAnger() {
+        moveCounterColor = Color.BLUE;
+    }
+
+    private void iAmAnger() {
+        moveCounterColor = Color.RED;
+    }
+
+    private boolean canISeeTarget(Unit target) {
+        for (int i = cellX - viewRange; i <= cellX + viewRange; i++) {
+            for (int j = cellY - viewRange; j <= cellY + viewRange; j++) {
+                if (target.cellX == i && target.cellY == j)
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    private void tryToRandomMove() {
+        int moveX, moveY;
+        do {
+            moveX = (int) (cellX + Math.round(Math.random()) * Math.round(1 - Math.random() * 2));
+            moveY = (int) (cellY + Math.round(Math.random()) * Math.round(1 - Math.random() * 2));
+        }  while (moveX == 0 && moveY == 0) ;
+        goTo(moveX, moveY);
+    }
+
+    public void tryToMove(Unit target) {
         int bestX = -1, bestY = -1;
         float bestDst = 10000;
         for (int i = cellX - 1; i <= cellX + 1; i++) {

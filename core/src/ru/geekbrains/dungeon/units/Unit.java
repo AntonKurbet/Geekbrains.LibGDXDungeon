@@ -1,5 +1,7 @@
 package ru.geekbrains.dungeon.units;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -12,6 +14,7 @@ public abstract class Unit {
     GameController gc;
     TextureRegion texture;
     TextureRegion textureHp;
+    BitmapFont font = new BitmapFont();
     int damage;
     int defence;
     int hp;
@@ -19,10 +22,13 @@ public abstract class Unit {
     int cellX;
     int cellY;
     int attackRange;
+    int viewRange;
     float movementTime;
     float movementMaxTime;
     int targetX, targetY;
     int turns, maxTurns;
+    int experience;
+    Color moveCounterColor;
 
     public int getDefence() {
         return defence;
@@ -53,6 +59,8 @@ public abstract class Unit {
         this.maxTurns = 5;
         this.movementMaxTime = 0.2f;
         this.attackRange = 2;
+        this.viewRange = 5;
+        this.moveCounterColor = Color.BLUE;
     }
 
     public void startTurn() {
@@ -95,9 +103,13 @@ public abstract class Unit {
     }
 
     public void attack(Unit target) {
-        target.takeDamage(BattleCalc.attack(this, target));
-        this.takeDamage(BattleCalc.checkCounterAttack(this, target));
+        if (target.takeDamage(BattleCalc.attack(this, target))) addExperience(1);
+        if (this.takeDamage(BattleCalc.checkCounterAttack(this, target))) target.addExperience(1);
         turns--;
+    }
+
+    private void addExperience(int i) {
+        experience += i;
     }
 
     public void update(float dt) {
@@ -127,6 +139,10 @@ public abstract class Unit {
         batch.setColor(0.0f, 1.0f, 0.0f, 1.0f);
         batch.draw(textureHp, px + 2, py + 52, (float) hp / hpMax * 56, 8);
         batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+        font.setColor(Color.GOLD);
+        font.draw(batch, Integer.toString(experience), px + 2, py + 52);
+        font.setColor(moveCounterColor);
+        font.draw(batch, Integer.toString(turns), px + 52, py + 52);
     }
 
     public int getTurns() {
