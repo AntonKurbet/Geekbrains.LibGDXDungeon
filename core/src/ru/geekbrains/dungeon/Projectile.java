@@ -1,7 +1,6 @@
 package ru.geekbrains.dungeon;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
@@ -37,10 +36,6 @@ public class Projectile {
         if (position.x < 0 || position.x > 1280 || position.y < 0 || position.y > 720) {
             deactivate();
         }
-        // position = (100, 100)
-        // velocity = (200, 40)
-        // position.add(velocity) => (100 + 200, 100 + 40) !!! incorrect
-        // position.mulAdd(velocity, dt) => (100 + 200 * dt, 100 + 40 * dt)
     }
 
     public void render(SpriteBatch batch) {
