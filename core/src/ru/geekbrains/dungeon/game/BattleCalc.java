@@ -14,9 +14,16 @@ public class BattleCalc {
 
     public static int checkCounterAttack(Unit attacker, Unit target) {
         if (MathUtils.random() < 0.2f) {
-            int amount = attack(target, attacker);
-            return amount;
+            return attack(target, attacker);
         }
         return 0;
+    }
+
+    public static int getCoins(Unit target) {
+        // может быть нужно gc.getUnitController().getHero() анализировать, но пока тут нет gc
+        if (target.getClass().getSimpleName().equals("Monster"))
+            return 1 + MathUtils.random(2);
+        else
+            return 0;
     }
 }

@@ -13,6 +13,7 @@ public class UnitController {
     private Unit currentUnit;
     private int index;
     private List<Unit> allUnits;
+    private int round = 1;
 
     public MonsterController getMonsterController() {
         return monsterController;
@@ -21,6 +22,8 @@ public class UnitController {
     public Hero getHero() {
         return hero;
     }
+
+    public int getRound() { return round; }
 
     public boolean isItMyTurn(Unit unit) {
         return currentUnit == unit;
@@ -55,6 +58,8 @@ public class UnitController {
         index++;
         if (index >= allUnits.size()) {
             index = 0;
+            round++;
+            if (round % 3 == 0) allUnits.add(monsterController.activateRandom());
         }
         currentUnit = allUnits.get(index);
         currentUnit.startTurn();
