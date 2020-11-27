@@ -1,16 +1,18 @@
-package ru.geekbrains.dungeon;
+package ru.geekbrains.dungeon.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import ru.geekbrains.dungeon.helpers.Poolable;
 
-public class Projectile {
+public class Projectile implements Poolable {
     private TextureRegion texture;
     private Vector2 position;
     private Vector2 velocity;
     private boolean active;
 
+    @Override
     public boolean isActive() {
         return active;
     }
@@ -37,10 +39,6 @@ public class Projectile {
         if (position.x < 0 || position.x > 1280 || position.y < 0 || position.y > 720) {
             deactivate();
         }
-        // position = (100, 100)
-        // velocity = (200, 40)
-        // position.add(velocity) => (100 + 200, 100 + 40) !!! incorrect
-        // position.mulAdd(velocity, dt) => (100 + 200 * dt, 100 + 40 * dt)
     }
 
     public void render(SpriteBatch batch) {
