@@ -3,38 +3,66 @@ images1.png
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-weapon
+Hero
   rotate: false
   xy: 2, 2
-  size: 40, 40
-  orig: 40, 40
+  size: 480, 240
+  orig: 480, 240
   offset: 0, 0
   index: -1
-tank
+Bomber
   rotate: false
-  xy: 44, 2
-  size: 40, 40
-  orig: 40, 40
+  xy: 2, 244
+  size: 480, 240
+  orig: 480, 240
   offset: 0, 0
   index: -1
-grass40
+trees
   rotate: false
-  xy: 86, 2
-  size: 40, 40
-  orig: 40, 40
+  xy: 2, 486
+  size: 300, 90
+  orig: 300, 90
   offset: 0, 0
   index: -1
-block
+simpleButton
   rotate: false
-  xy: 2, 44
-  size: 20, 20
-  orig: 20, 20
+  xy: 2, 578
+  size: 320, 80
+  orig: 320, 80
+  offset: 0, 0
+  index: -1
+chest
+  rotate: false
+  xy: 304, 486
+  size: 120, 60
+  orig: 120, 60
+  offset: 0, 0
+  index: -1
+grass
+  rotate: false
+  xy: 426, 486
+  size: 60, 60
+  orig: 60, 60
+  offset: 0, 0
+  index: -1
+cursor
+  rotate: false
+  xy: 324, 578
+  size: 60, 60
+  orig: 60, 60
   offset: 0, 0
   index: -1
 projectile
   rotate: false
-  xy: 2, 66
+  xy: 484, 2
   size: 16, 16
   orig: 16, 16
+  offset: 0, 0
+  index: -1
+hp
+  rotate: false
+  xy: 304, 548
+  size: 60, 8
+  orig: 60, 8
   offset: 0, 0
   index: -1

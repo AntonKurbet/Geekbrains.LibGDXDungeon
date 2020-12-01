@@ -1,0 +1,2 @@
+btn_new_game_x=480
+btn_new_game_y=300
