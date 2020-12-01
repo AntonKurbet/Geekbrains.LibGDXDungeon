@@ -4,9 +4,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Align;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import ru.geekbrains.dungeon.helpers.Poolable;
 
 @Data
@@ -25,9 +24,9 @@ public abstract class Unit implements Poolable {
     float movementTime;
     float movementMaxTime;
     int targetX, targetY;
-    int turns, maxTurns;
     float innerTimer;
     StringBuilder stringHelper;
+    int turnSteps, turnAttacks;
 
     public Unit(GameController gc, int cellX, int cellY, int hpMax) {
         this.gc = gc;
@@ -39,7 +38,6 @@ public abstract class Unit implements Poolable {
         this.targetY = cellY;
         this.damage = 2;
         this.defence = 0;
-        this.maxTurns = GameController.TURNS_COUNT;
         this.movementMaxTime = 0.2f;
         this.attackRange = 2;
         this.innerTimer = MathUtils.random(1000.0f);
@@ -59,7 +57,8 @@ public abstract class Unit implements Poolable {
     }
 
     public void startTurn() {
-        turns = maxTurns;
+        turnSteps = MathUtils.random(1,4);
+        turnAttacks = MathUtils.random(1,4);
     }
 
     public void startRound() {
@@ -81,7 +80,10 @@ public abstract class Unit implements Poolable {
     }
 
     public boolean canIMakeAction() {
-        return gc.getUnitController().isItMyTurn(this) && turns > 0 && isStayStill();
+        boolean canAttack = canIAttackAnyTarget();
+        if ((!canAttack) && (turnSteps <= 0)) turnAttacks = 0;
+        return gc.getUnitController().isItMyTurn(this)
+                && ((turnSteps > 0 || (turnAttacks > 0)) && isStayStill());
     }
 
     public boolean isStayStill() {
@@ -99,14 +101,28 @@ public abstract class Unit implements Poolable {
     }
 
     public boolean canIAttackThisTarget(Unit target) {
-        return cellX - target.getCellX() == 0 && Math.abs(cellY - target.getCellY()) <= attackRange ||
-                cellY - target.getCellY() == 0 && Math.abs(cellX - target.getCellX()) <= attackRange;
+        return turnAttacks > 0 &&
+                (cellX - target.getCellX() == 0 && Math.abs(cellY - target.getCellY()) <= attackRange ||
+                 cellY - target.getCellY() == 0 && Math.abs(cellX - target.getCellX()) <= attackRange);
     }
 
+    public boolean canIAttackAnyTarget() {
+        if (turnAttacks > 0)
+            for (int i = 0; i < gc.getUnitController().getAllUnits().size(); i++) {
+                if ((!gc.getUnitController().getAllUnits().get(i).equals(this))
+                    && (canIAttackThisTarget(gc.getUnitController().getAllUnits().get(i))))
+                    return true;
+            }
+        return false;
+    }
+
+
     public void attack(Unit target) {
-        target.takeDamage(this, BattleCalc.attack(this, target));
-        this.takeDamage(target, BattleCalc.checkCounterAttack(this, target));
-        turns--;
+        if (turnAttacks > 0) {
+            target.takeDamage(this, BattleCalc.attack(this, target));
+            this.takeDamage(target, BattleCalc.checkCounterAttack(this, target));
+            turnAttacks--;
+        }
     }
 
     public void update(float dt) {
@@ -117,7 +133,7 @@ public abstract class Unit implements Poolable {
                 movementTime = 0;
                 cellX = targetX;
                 cellY = targetY;
-                turns--;
+                turnSteps--;
             }
         }
     }
@@ -146,9 +162,16 @@ public abstract class Unit implements Poolable {
         stringHelper.setLength(0);
         stringHelper.append(hp);
         font18.setColor(1.0f, 1.0f, 1.0f, hpAlpha);
-        font18.draw(batch, stringHelper, barX, barY + 64, 60, 1, false);
-
+        font18.draw(batch, stringHelper, barX, barY + 64, 60, Align.center, false);
         font18.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+        if (turnAttacks + turnSteps > 0) {
+            stringHelper.setLength(0);
+            if (turnAttacks > 0) stringHelper.append("A:").append(turnAttacks);
+            if (turnSteps > 0) stringHelper.append("S:").append(turnSteps);
+            font18.draw(batch, stringHelper, barX, barY + 80, 60, Align.right, false);
+        }
+
         batch.setColor(1.0f, 1.0f, 1.0f, 1.0f);
     }
 

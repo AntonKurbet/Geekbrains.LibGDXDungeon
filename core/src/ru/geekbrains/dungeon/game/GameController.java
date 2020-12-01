@@ -10,7 +10,6 @@ import ru.geekbrains.dungeon.screens.ScreenManager;
 @Data
 public class GameController {
     public static final int INITIAL_MONSTERS_COUNT = 3;
-    public static final int TURNS_COUNT = 5;
 
     private SpriteBatch batch;
     private ProjectileController projectileController;

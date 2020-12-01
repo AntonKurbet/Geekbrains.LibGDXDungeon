@@ -46,7 +46,7 @@ public class Monster extends Unit {
             return;
         }
         if (amIBlocked()) {
-            turns = 0;
+            turnSteps = 0;
             return;
         }
         if (Utils.getCellsIntDistance(cellX, cellY, target.getCellX(), target.getCellY()) < 5) {
